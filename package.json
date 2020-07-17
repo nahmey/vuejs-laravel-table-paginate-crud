@@ -2,11 +2,23 @@
   "name": "vuejs-laravel-table-pagination-crud",
   "version": "1.0.0",
   "description": "Laravel module in vuejs with pagination, sorting, modal",
-  "main": "dist/paginationvuecomponent.umd.js",
-  "module": "dist/paginationvuecomponent.esm.js",
-  "unpkg": "dist/paginationvuecomponent.min.js",
+  "main": [
+    "dist/paginationvuecomponent.umd.js",
+    "dist/custombuttonvuecomponent.umd.js",
+    "dist/modalvuecomponent.umd.js"
+  ],
+  "module": [
+    "dist/paginationvuecomponent.esm.js",
+    "dist/custombuttonvuecomponent.esm.js",
+    "dist/modalvuecomponent.esm.js"
+  ],
+  "unpkg": [
+    "dist/paginationvuecomponent.min.js",
+    "dist/custombuttonvuecomponent.min.js",
+    "dist/modalvuecomponent.min.js"
+  ],
   "browser": {
-    "./sfc": "src/paginationvuecomponent.vue"
+    "./sfc": "src/modalvuecomponent.vue"
   },
   "files": [
     "dist/*",
@@ -20,9 +32,9 @@
   },
   "scripts": {
     "build": "npm run build:unpkg & npm run build:es & npm run build:umd",
-    "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/paginationvuecomponent.umd.js",
-    "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/paginationvuecomponent.esm.js",
-    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/paginationvuecomponent.min.js"
+    "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/modalvuecomponent.js",
+    "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/modalvuecomponent.esm.js",
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/modalvuecomponent.min.js"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

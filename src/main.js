@@ -1,9 +1,13 @@
-import component from './PaginationVue.vue'
+import paginationComponent from './PaginationVue.vue';
+import buttonComponent from './CustomButtonVue.vue';
+import modalComponent from './ModalVue.vue';
 
 function install(Vue) {
   if (install.installed) return
   install.installed = true
-  Vue.component('PaginationVue', component)
+  Vue.component('PaginationVue', paginationComponent)
+  Vue.component('CustomButtonVue', buttonComponent)
+  Vue.component('ModalVue', modalComponent)
 }
 
 const plugin = {
