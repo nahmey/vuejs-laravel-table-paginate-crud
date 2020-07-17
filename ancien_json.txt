@@ -1,0 +1,19 @@
+// {
+//   "name": "vuejs-laravel-table-pagination-crud",
+//   "version": "1.0.0",
+//   "description": "Laravel module in vuejs with pagination, sorting, modal",
+//   "main": "main.js",
+//   "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1"
+//   },
+//   "repository": {
+//     "type": "git",
+//     "url": "git+https://github.com/nahmey/vuejs-laravel-paginate-crud.git"
+//   },
+//   "author": "Julien Kennel",
+//   "license": "ISC",
+//   "bugs": {
+//     "url": "https://github.com/nahmey/vuejs-laravel-paginate-crud/issues"
+//   },
+//   "homepage": "https://github.com/nahmey/vuejs-laravel-paginate-crud#readme"
+// }

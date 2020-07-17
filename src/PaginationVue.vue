@@ -1,0 +1,216 @@
+<template>
+    <div>
+        <div class="clearfix mb-4">
+            <div class="float-right">
+                <!-- <label for="par-page"># par page</label> -->
+                <select class="form-control" v-on:change="setPages($event)" v-model="perPage">
+                    <option v-for="nb in nbPerPage" :value="nb">
+                        {{nb}}
+                    </option>
+                </select>
+            </div>
+            <custom-button-vue v-if="create_button"
+            v-on:modalInfo="modalInfo"
+            v-bind:classButton="create_button.class_button" 
+            v-bind:text="create_button.text" 
+            v-bind:action="create_button.action" 
+            v-bind:icon="create_button.icon"
+            v-bind:identifiant="create_button.id"
+            v-bind:href="create_button.href"
+            v-bind:url="create_button.url"
+            v-bind:alert="create_button.alert"
+            v-bind:modal="create_button.modal"
+            v-on:destroyResult="destroy"
+            v-on:createResult="create"
+            ></custom-button-vue>
+        </div>
+
+    	<table class="table table-responsive-md table-striped">
+            <thead class="thead">
+                <tr>
+                    <th v-for="column in col" v-bind:style="column.style" v-bind:class="column.class">
+                        <div v-if="column.key != false">
+                            <h5>
+                                <a href="javascript:" v-on:click=" currentSortDir = currentSortDir === 'asc'?'desc':'asc', currentSort = column.key">
+                                    {{column.title}} <i v-bind:class="sortOrder(column.key, currentSortDir)"></i>
+                                </a>
+                            </h5>
+                        </div>
+                        <div v-else>
+                            <h5>
+                                {{column.title}}
+                            </h5>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(data, index) in displayedDonnees" :key="data.id">
+                    <td v-for="column in col" v-bind:class="column.class">
+                        <div v-if="data[column.key]">
+                            {{data[column.key]}}
+                        </div>
+                        <div v-else-if="column.button && column.button == true">
+                            <custom-button-vue
+                            v-on:modalInfo="modalInfo" 
+                            v-bind:classButton="column.class_button" 
+                            v-bind:text="column.text" 
+                            v-bind:action="column.action" 
+                            v-bind:icon="column.icon"
+                            v-bind:identifiant="data.id"
+                            v-bind:href="column.href"
+                            v-bind:url="column.url"
+                            v-bind:alert="column.alert"
+                            v-bind:modal="column.modal"
+                            v-on:destroyResult="destroy"
+                            v-on:createResult="create"
+                            ></custom-button-vue>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example" v-if="pages.length > 1">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" v-if="page != 1">
+                    <a class="page-link"  v-on:click.prevent="page--" href="#">Retour</a>
+                </li>
+                <div v-for="pageNumber in paginationPage()">
+                    <li :class="page == pageNumber ? 'page-item active' : 'page-item'">
+                        <a class="page-link page-scroll" v-on:click.prevent="page = pageNumber" href="#">{{pageNumber}}</a>
+                    </li>
+                </div>
+                <li class="page-item" v-if="page < pages.length">
+                    <a class="page-link" v-on:click.prevent="page++" href="#">Suivant</a>
+                </li>
+            </ul>
+        </nav>
+
+        <modal-vue ref="modalComponent"
+            v-bind:name="modal.name"
+            v-bind:modalTitle="modal.modal_title"
+            v-bind:modalInputs="modal.modal_inputs"
+            v-bind:action= "modal.action"
+            v-bind:url="modal.url"
+            v-bind:method="modal.method"
+            v-on:createResult="create"
+            v-on:editResult="edit"
+        ></modal-vue>
+    </div>
+</template>
+
+<script>
+    export default {
+    	name:  'Pagination',
+    	props: {
+		    columns: Array,
+		    results: Array,
+            numberPerPage: Array,
+            createButton: Object,
+		},
+    	data: function(){
+            return{
+            	pages: [],
+            	currentSortDir: 'asc',
+            	currentSort: 'nom',
+            	col: this.columns,
+            	res: this.results,
+            	page: 1,
+				perPage: 10,
+                nbPerPage: this.numberPerPage,
+                create_button: this.createButton,
+                showModal: false,
+                modal: {
+                    name: '',
+                    modalTitle: '',
+                    modalInputs: '',
+                    action: '',
+                    url: '',
+                    method: '',
+                }
+            }
+        },
+        watch: {
+            res: function() {
+                this.setPages();
+        	},
+        },
+        methods: {
+            modalInfo: function(event){
+                this.modal = {
+                    name: event.name,
+                    modalTitle: event.modal_title,
+                    modalInputs: event.modal_inputs,
+                    action: event.action,
+                    url: event.url,
+                    method: event.method,
+                    identifiant: event.identifiant,
+                }
+
+                let element = [];
+                if(event.action == 'edit'){
+                    element = this.results.filter(function(item){
+                        return item.id == event.identifiant;
+                    });
+                }
+
+                this.$refs.modalComponent.showModal(this.modal, element);
+            },
+        	sortOrder: function(tri, ordre){
+	            if(this.currentSort == tri && this.currentSortDir == 'asc') return 'fas fa-caret-up';
+	            if(this.currentSort == tri && this.currentSortDir == 'desc') return 'fas fa-caret-down';
+	        },
+	        setPages: function(event) {
+                this.pages = [];
+                let numberOfPages = Math.ceil(this.res.length / this.perPage);
+                for (let index = 1; index <= numberOfPages; index++) {
+                    this.pages.push(index);
+                }
+            },
+            paginationPage: function(){
+                let before = 1;
+                if(this.page <= 5) before = this.page - this.page; 
+                else before = this.page-5;
+                return this.pages.slice(before, this.page+4);
+            },
+            sort: function(data) {
+                let currentSort = this.currentSort;
+                let currentSortDir = this.currentSortDir;
+                let self = this;
+                data.sort(function(a, b) { 
+                    let modifier = 1;
+                    if(self.currentSortDir === 'desc') modifier = -1;
+                    return a[currentSort] > b[currentSort] ? 1*modifier : -1*modifier;
+                });
+
+                let from = (this.page * this.perPage) - this.perPage;
+                let to = (this.page * this.perPage);
+                return data.slice(from, to);
+            },
+            create(event){
+                this.res.push(event);
+                
+            },
+            edit(event){
+                let element = this.res.map(function(x){
+                    return x.id;
+                }).indexOf(event.id);
+
+                this.res.splice(element, 1, event);
+            },
+            destroy(event){
+                let element = this.res.map(function(x){
+                    return x.id;
+                }).indexOf(event);
+
+                this.res.splice(element, 1);
+            }
+        },
+        computed: {
+            displayedDonnees: function() {
+            	return this.sort(this.res);
+            },
+        }
+    }
+</script>
