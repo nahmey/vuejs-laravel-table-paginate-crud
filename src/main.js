@@ -25,6 +25,6 @@ if (GlobalVue) {
   GlobalVue.use(plugin)
 }
 
-component.install = install
+// component.install = install
 
 export default component
