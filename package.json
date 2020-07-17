@@ -1,6 +1,6 @@
 {
   "name": "vuejs-laravel-table-pagination-crud",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Laravel module in vuejs with pagination, sorting, modal",
   "main": [
     "dist/paginationvuecomponent.umd.js",
