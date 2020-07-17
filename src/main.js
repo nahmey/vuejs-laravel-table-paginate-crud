@@ -29,6 +29,8 @@ paginationComponent.install = install
 buttonComponent.install = install
 modalComponent.install = install
 
-export default component
-export default buttonComponent
-export default modalComponent
+export default {
+	paginationComponent,
+	buttonComponent,
+	modalComponent
+}
