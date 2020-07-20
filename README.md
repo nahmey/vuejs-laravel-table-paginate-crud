@@ -1,6 +1,6 @@
 # vuejs-laravel-table-paginate-crud
 
-![alt text](http://url/to/img.png)
+![alt text](https://julien-kennel.fr/images/git/table.PNG)
 
 This CRUD Vue package offers an easy way of displaying Bootstrap-styled table with data with Laravel.
 This package also allows pagination and sorting with simple configuration.
@@ -9,6 +9,7 @@ This package also allows pagination and sorting with simple configuration.
 - [Installation](#installation)
 - [Example Usage](#example-usage)
 - [Configuration](#configuration)
+	- [Note](#note)
     - [Results](#results)
     - [Number Per Page](#number-per-page)
     - [Create Button](#create-button)
@@ -58,14 +59,6 @@ import ModalVue from 'vuejs-laravel-table-pagination-crud/src/ModalVue.vue';
 Vue.component('pagination-vue', PaginationVue);
 Vue.component('custom-button-vue', CustomButtonVue);
 Vue.component('modal-vue', ModalVue);
-
-
-// import VueGoodTablePlugin from 'vue-good-table';
-
-// // import the styles 
-// import 'vue-good-table/dist/vue-good-table.css'
-
-// Vue.use(VueGoodTablePlugin);
 ```
 
 ## Example Usage
@@ -109,10 +102,10 @@ Vue.component('modal-vue', ModalVue);
                 self.create_button = {
                     button: true,
                     href: false,
-                    text: 'Ajouter Type',
+                    text: 'Add User',
                     class_button: 'btn btn-primary text-white',
                     action: 'modal',
-                    // url: base_url + 'users',
+                    url: base_url + 'users',
                     icon: 'fas fa-plus-circle',
                     modal: {
                         modal: true,
@@ -161,6 +154,18 @@ Vue.component('modal-vue', ModalVue);
                                 name: 'name',
                                 id: 'name',
                                 required: true,
+                            },{
+                                type: 'text',
+                                label: 'First Name',
+                                name: 'firstname',
+                                id: 'firstname',
+                                required: true,
+                            }, {
+                                type: 'text',
+                                label: 'Age',
+                                name: 'age',
+                                id: 'age',
+                                required: true,
                             }]
                         },
                         icon: 'fas fa-edit'
@@ -200,6 +205,20 @@ Vue.component('modal-vue', ModalVue);
 
 ## Configuration
 
+### Note 
+
+In the head of app :
+```html
+<meta name="csrf-token" content="{{ csrf_token() }}"> 
+```
+
+(optional)
+```html
+<script type="text/javascript">
+    var base_url = "{!! url('/') !!}";
+</script> 
+```
+
 ### Results 
 <!-- `Array` -->
 self.results = resp.data['your_data'];
@@ -212,14 +231,13 @@ self.number_per_page = [10,20,50];
 ### Columns
 
 
-
 ```javascript
 self.columns = [
     {
-        title: 'Name',
-        key: 'name',
-        style: false,
-        class: false,
+        title: 'Name', // Name of column
+        key: 'name', // name of column in yout database
+        style: false, // add custom css
+        class: false, // add boostrap class
     },
     {
         title: 'Age',
@@ -227,51 +245,57 @@ self.columns = [
         style: false,
         class: false,
     },
+    // Add button
     {
         title: 'Edit',  // Name of column
-        key: false, // pas de clé si il n'a pas besoin d'être sort by
-        button: true, // si true on affiche bouton, si false on affiche rien
-        href: true, // Si true, on fait un a href et pas un bouton
-        text: false,  // si != false on affiche le texte du bouton
-        class_button: 'btn btn-primary', // si != false class du bouton bootstrap
-        action: 'edit', // si != false (edit, delete, url, modal)
-        url: base_url + '/type_lynx',
+        key: false, // (true, false) - false if the column don't exist in your Database
+        button: true, // Default : false - (true or false) for displaying button
+        href: true, // Default : false - (true or false) True if <a href="">
+        text: false,  // Default : false - (string) Text of button 
+        class_button: 'btn btn-primary', // Default : false - (string) bootstrap class button
+        action: 'edit', // (create, edit, destroy) - Laravel CRUD action
+        url: base_url + '/users', // Default : false - url which will be generated
+        icon: 'fas fa-edit', // Default : false - Class of fontawesome icon
+        style: 'width:10%', // Custom css style
+        class: 'text-center', // Boostrap class
+
+        // if you want modal
         modal: {
-            modal: true,
-            name: 'edit_modal',
-            modal_title: 'Modifier',
-            action: 'edit', //Create  ou edit
-            url: base_url + '/type_lynx', // Vers le controller
-            method: 'PUT', // POST, PUT, DELETE
+            modal: true,// Default : false - (true or false) for displaying modal
+            name: 'edit_modal', // Default : false - name of modal
+            modal_title: 'Edit', // Default : false - modal title
+            action: 'edit', // (create, edit) - Laravel CRUD action
+            url: base_url + '/users', // Default : false - url which will be generated
+            method: 'POST', // Default : false - form method
+
+            // You can add inputs for forms generation
             modal_inputs: [{
                 type: 'text',
-                label: 'Nom',
-                name: 'nom',
-                id: 'nom',
+                label: 'Name',
+                name: 'name',
+                id: 'name',
                 required: true,
             }]
         },
-        icon: 'fas fa-edit', // si != false on affiche l'icon
-        style: 'width:10%',
-        class: 'text-center',
+        
     },
     {
-        title: 'Supprimer',  // Titre de la colonne
-        key: false, // pas de clé si il n'a pas besoin d'être sort by
-        button: true, // si true on affiche bouton, si false on affiche rien
-        href: false, // Si true, on fait un a href et pas un bouton
-        text: false,  // si != false on affiche le texte du bouton
-        class_button: 'btn btn-danger', // si != false class du bouton bootstrap
-        action: 'destroy', // si != false, soit lien si href, soit lien vers l'appli
+        title: 'Delete',
+        key: false,
+        button: true,
+        href: false,
+        text: false,
+        class_button: 'btn btn-danger',
+        action: 'destroy',
         modal: {
             modal: false,
             name: false,
         },
-        url: base_url + '/type_lynx',
-        icon: 'fas fa-trash-alt', // si != false on affiche l'icon
+        url: base_url + '/users',
+        icon: 'fas fa-trash-alt',
         style: 'width:10%',
         class: 'text-center',
-        alert: 'Êtes-vous bien sûr de vouloir faire cela ? La suppression est irréversible !',
+        alert: 'Are you sure ?', //Default: false - (false, string) You can add custom confirm alert
     },
 ];
 
@@ -291,13 +315,13 @@ self.create_button = {
     href: false, // Default : false - (true or false) True if <a href="">
     text: 'Add Users',  // Default : false - (string) Text of button 
     class_button: 'btn btn-primary text-white', // Default : false - (string) bootstrap class button
-    action: 'modal', // Default : false - (create, edit, delete, url, modal)
+    action: 'modal', // Default : false - (create, edit, destroy, url, modal)
 
     // Declare the type of CRUD action, url or modal if you wants that appear in a modal window
     url: base_url + 'users', // Default : false - url which will be generated
     icon: 'fas fa-plus-circle', // Default : false - Class of fontawesome icon
 
-    //  So if you declare modal in action :
+    // if you want modal
     modal: {
         modal: true, // Default : false - (true or false) for displaying modal
         name: 'create_modal', // Default : false - name of modal
