@@ -1,5 +1,6 @@
 # vuejs-laravel-table-paginate-crud
 
+![alt text](http://url/to/img.png)
 
 This CRUD Vue package offers an easy way of displaying Bootstrap-styled table with data with Laravel.
 This package also allows pagination and sorting with simple configuration.
@@ -206,6 +207,7 @@ These options relate to the table as a whole
 
 ### Results 
 <!-- `Array` -->
+self.number_per_page = [10,20,50];
 
 ### Number Per Page 
 <!-- `Array` -->
