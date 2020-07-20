@@ -9,10 +9,10 @@ This package also allows pagination and sorting with simple configuration.
 - [Installation](#installation)
 - [Example Usage](#example-usage)
 - [Configuration](#configuration)
-    - [Columns](#columns)
     - [Results](#results)
     - [Number Per Page](#number-per-page)
     - [Create Button](#create-button)
+    - [Columns](#columns)
 
 ## Dependencies
 
@@ -68,7 +68,7 @@ Vue.component('modal-vue', ModalVue);
 // Vue.use(VueGoodTablePlugin);
 ```
 
-### Example Usage
+## Example Usage
 ```html
 <template>
 	<pagination-vue v-if="load_data"  
@@ -113,7 +113,7 @@ Vue.component('modal-vue', ModalVue);
                     class_button: 'btn btn-primary text-white',
                     action: 'modal',
                     // url: base_url + 'users',
-                    icon: 'fas fa-plus-circle', // si != false on affiche l'icon
+                    icon: 'fas fa-plus-circle',
                     modal: {
                         modal: true,
                         name: 'create_modal',
@@ -200,29 +200,85 @@ Vue.component('modal-vue', ModalVue);
 
 ## Configuration
 
-### Columns
-
-<!-- `Array` -->
-These options relate to the table as a whole
-
 ### Results 
 <!-- `Array` -->
-self.number_per_page = [10,20,50];
+self.results = resp.data['your_data'];
 
 ### Number Per Page 
-<!-- `Array` -->
+Number of element displaying
 
-Array containing objects that describe table columns. The column object itself can contain many [configurable properties](#column-options).
+self.number_per_page = [10,20,50];
+
+### Columns
+
+
+
 ```javascript
-[
+self.columns = [
     {
-      label: 'Name',
-      field: 'name',
-      filterable: true,
-    }
-    //...
-]
+        title: 'Name',
+        key: 'name',
+        style: false,
+        class: false,
+    },
+    {
+        title: 'Age',
+        key: 'age',
+        style: false,
+        class: false,
+    },
+    {
+        title: 'Edit',  // Name of column
+        key: false, // pas de clé si il n'a pas besoin d'être sort by
+        button: true, // si true on affiche bouton, si false on affiche rien
+        href: true, // Si true, on fait un a href et pas un bouton
+        text: false,  // si != false on affiche le texte du bouton
+        class_button: 'btn btn-primary', // si != false class du bouton bootstrap
+        action: 'edit', // si != false (edit, delete, url, modal)
+        url: base_url + '/type_lynx',
+        modal: {
+            modal: true,
+            name: 'edit_modal',
+            modal_title: 'Modifier',
+            action: 'edit', //Create  ou edit
+            url: base_url + '/type_lynx', // Vers le controller
+            method: 'PUT', // POST, PUT, DELETE
+            modal_inputs: [{
+                type: 'text',
+                label: 'Nom',
+                name: 'nom',
+                id: 'nom',
+                required: true,
+            }]
+        },
+        icon: 'fas fa-edit', // si != false on affiche l'icon
+        style: 'width:10%',
+        class: 'text-center',
+    },
+    {
+        title: 'Supprimer',  // Titre de la colonne
+        key: false, // pas de clé si il n'a pas besoin d'être sort by
+        button: true, // si true on affiche bouton, si false on affiche rien
+        href: false, // Si true, on fait un a href et pas un bouton
+        text: false,  // si != false on affiche le texte du bouton
+        class_button: 'btn btn-danger', // si != false class du bouton bootstrap
+        action: 'destroy', // si != false, soit lien si href, soit lien vers l'appli
+        modal: {
+            modal: false,
+            name: false,
+        },
+        url: base_url + '/type_lynx',
+        icon: 'fas fa-trash-alt', // si != false on affiche l'icon
+        style: 'width:10%',
+        class: 'text-center',
+        alert: 'Êtes-vous bien sûr de vouloir faire cela ? La suppression est irréversible !',
+    },
+];
+
 ```
+
+
+
 
 ### Create Button
 <!-- `Array` -->
