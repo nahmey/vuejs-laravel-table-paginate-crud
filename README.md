@@ -234,9 +234,11 @@ self.create_button = {
     text: 'Add Users',  // Default : false - (string) Text of button 
     class_button: 'btn btn-primary text-white', // Default : false - (string) bootstrap class button
     action: 'modal', // Default : false - (create, edit, delete, url, modal)
+
     // Declare the type of CRUD action, url or modal if you wants that appear in a modal window
     url: base_url + 'users', // Default : false - url which will be generated
     icon: 'fas fa-plus-circle', // Default : false - Class of fontawesome icon
+
     //  So if you declare modal in action :
     modal: {
         modal: true, // Default : false - (true or false) for displaying modal
@@ -245,6 +247,7 @@ self.create_button = {
         action: 'create', // (create, edit) - Laravel CRUD action
         url: base_url + '/users', // Default : false - url which will be generated
         method: 'POST', // Default : false - form method
+
         // You can add inputs for forms generation
         modal_inputs: [{
             type: 'text', // (string) - Type of input
@@ -255,16 +258,4 @@ self.create_button = {
         }]
     },
 }
-```
-
-Array containing row objects. Each row object contains data that will be displayed in the table row.
-```javascript
-[
-    {
-      id:1,
-      name:"John",
-      age:20
-    },
-    //...
-]
 ```
