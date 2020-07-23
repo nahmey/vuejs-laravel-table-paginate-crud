@@ -2,8 +2,8 @@
 
 ![alt text](https://julien-kennel.fr/images/git/table.PNG)
 
-This CRUD Vue.js package offers an easy way of displaying Bootstrap table with Laravel.
-This package also allows pagination and sorting with simple configuration.
+This CRUD Vue.js package offers an easy displaying Bootstrap/Laravel table tool.
+This package also allows pagination and sorting with an easy configuration.
 
 - [Dependencies](#dependencies)
 - [Installation](#installation)
