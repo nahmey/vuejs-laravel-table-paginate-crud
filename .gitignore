@@ -1,1 +1,10 @@
 dist/
+
+# general
+*.DS_Store
+
+# vscode workspace settings
+.vscode/
+
+# dependency directories/files
+node_modules/
