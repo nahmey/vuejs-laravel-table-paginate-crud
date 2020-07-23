@@ -1,14 +1,20 @@
 {
   "name": "vuejs-laravel-table-pagination-crud",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "Laravel Crud module in vuejs with pagination, sorting, modal",
+  "author": "Joffrey VERD",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/nahmey/vuejs-laravel-table-paginate-crud"
   },
-  "publishConfig": {
-    "registry": "https://www.npmjs.com/package/vuejs-laravel-table-pagination-crud"
-  },
+  "keywords": [
+    "vuejs",
+    "laravel",
+    "table",
+    "pagination",
+    "crud",
+  ],
   "main": [
     "dist/paginationvuecomponent.umd.js",
     "dist/custombuttonvuecomponent.umd.js",
