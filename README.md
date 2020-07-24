@@ -54,11 +54,13 @@ window.Vue.use(VModal);
 import PaginationVue from 'vuejs-laravel-table-pagination-crud/src/PaginationVue.vue';
 import CustomButtonVue from 'vuejs-laravel-table-pagination-crud/src/CustomButtonVue.vue';
 import ModalVue from 'vuejs-laravel-table-pagination-crud/src/ModalVue.vue';
+import FilterVue from 'vuejs-laravel-table-pagination-crud/src/FilterVue.vue';
 
 
 Vue.component('pagination-vue', PaginationVue);
 Vue.component('custom-button-vue', CustomButtonVue);
 Vue.component('modal-vue', ModalVue);
+Vue.component('filter-vue', FilterVue);
 ```
 
 ## Example Usage
