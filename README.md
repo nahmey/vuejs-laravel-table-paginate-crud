@@ -66,11 +66,12 @@ Vue.component('filter-vue', FilterVue);
 ## Example Usage
 ```html
 <template>
-	<pagination-vue v-if="load_data"  
+    <pagination-vue v-if="load_data"  
     v-bind:columns="columns" 
     v-bind:results="results" 
     v-bind:numberPerPage="number_per_page" 
     v-bind:createButton="create_button"
+    v-bind:filters="filters"
     ></pagination-vue>
     
     <div v-else class="text-center">
