@@ -86,17 +86,54 @@ Vue.component('modal-vue', ModalVue);
 	            data: [],
 	            results: [],
                 number_per_page: [],
+                filters: [],
         	}
         },
         method: {
-            test: function(val){
-                console.log(val);
-            }
+
         },
         mounted: function() {
             const self = this;
-            axios.get(base_url + '/users/load_data')
+            axios.get('your url'')
             .then(function (resp) {
+
+                // Get result of request
+                self.results = [{
+                    'id': 1,
+                    'name': 'Vader',
+                    'firstname': 'Darth',
+                    'age': '55',
+                    'planete': 'Mustafar'
+                },{
+                    'id': 2,
+                    'name' : 'Kenobi',
+                    'firstname': 'Obi Wan',
+                    'age': '60',
+                    'planete': 'Tatoine'
+                },{
+                    'id': 3,
+                    'name' : 'Bings',
+                    'firstname': 'Jar Jar',
+                    'age': '120',
+                    'planete': 'Naboo'
+                }];
+
+                // Filters
+                let planetes = ['Mustafar', 'Tatoine', 'Naboo'];
+                self.filters = [
+                {
+                    data: planetes,
+                    name: 'planete', // name of key in results
+                    type: 'select', // (select or searchBar)
+                },
+                {
+                    data: '',
+                    name: '',
+                    type: 'searchBar', // If searchBar, no data/name
+                },
+                ]
+
+                // Number per page
                 self.number_per_page = [10,20,50];
 
                 self.create_button = {
@@ -168,7 +205,7 @@ Vue.component('modal-vue', ModalVue);
                                 required: true,
                             }]
                         },
-                        icon: 'fas fa-edit'
+                        icon: 'fas fa-edit',
                         style: 'width:10%',
                         class: 'text-center',
                     },

@@ -10,7 +10,7 @@
                         </div>
                     </template>
                 </template>
-                <a class="btn btn-light ml-4" href="#" v-on:click="resetFilter()"><i class="fas fa-ban"></i> Réinitialiser</a>
+                <a class="btn btn-light ml-4" href="javascript:" v-on:click="resetFilter()"><i class="fas fa-ban"></i> Réinitialiser</a>
             </div>
             <div class="card-body d-flex">
                 <div v-for="(filter, index) in fl" class="col-auto">
@@ -85,6 +85,7 @@ export default {
                 selected[name] = '0';
             });
             self.model = selected;
+            self.search = '';
             this.$emit('resetFilter', true);
         },
     },
