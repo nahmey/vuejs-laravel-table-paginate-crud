@@ -148,7 +148,7 @@
                 filter: {},
                 countResult: 0,
                 numberOfPages: 0,
-                searchbar: '',
+                searchBar: '',
                 modal: {
                     name: '',
                     modalTitle: '',
