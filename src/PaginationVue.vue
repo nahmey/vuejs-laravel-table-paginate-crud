@@ -275,14 +275,14 @@
                 /*
                  * If select filter is active 
                  */
-                merged = merged.filter(function(item){
+                let results = merged.filter(function(item){
                     for(var key in self.filter) {
                         if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
                     }
                     return true;
                 });
 
-                this.res = merged;
+                this.res = results;
                 this.page = 1;
             },
             changeFilters: function(event){
