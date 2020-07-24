@@ -1,31 +1,40 @@
 <template>
     <div>
-        <div class="clearfix mb-4">
-            <div class="float-right">
-                <!-- <label for="par-page"># par page</label> -->
-                <select class="form-control" v-on:change="setPages($event)" v-model="perPage">
-                    <option v-for="nb in nbPerPage" :value="nb">
-                        {{nb}}
-                    </option>
-                </select>
+        <template>
+            <filter-vue ref="filtreComponent"
+            v-if="fl != false"
+            v-bind:filters="fl"
+            v-on:changeFilters="changeFilters"
+            v-on:resetFilter="resetFilter"
+            v-on:search="search"
+            ></filter-vue>
+        </template>
+        <div>
+            <div class="clearfix mb-4">
+                <div class="float-right">
+                    <select class="form-control" v-on:change="setPages($event), page = 1" v-model="perPage">
+                        <option v-for="nb in nbPerPage" :value="nb" :key="'nbPerPage' + nb">
+                            {{nb}}
+                        </option>
+                    </select>
+                </div>
+                <custom-button-vue v-if="create_button"
+                v-on:modalInfo="modalInfo"
+                v-bind:classButton="create_button.class_button" 
+                v-bind:text="create_button.text" 
+                v-bind:action="create_button.action" 
+                v-bind:icon="create_button.icon"
+                v-bind:identifiant="create_button.id"
+                v-bind:href="create_button.href"
+                v-bind:url="create_button.url"
+                v-bind:alert="create_button.alert"
+                v-bind:modal="create_button.modal"
+                v-on:destroyResult="destroy"
+                v-on:createResult="create"
+                ></custom-button-vue>
             </div>
-            <custom-button-vue v-if="create_button"
-            v-on:modalInfo="modalInfo"
-            v-bind:classButton="create_button.class_button" 
-            v-bind:text="create_button.text" 
-            v-bind:action="create_button.action" 
-            v-bind:icon="create_button.icon"
-            v-bind:identifiant="create_button.id"
-            v-bind:href="create_button.href"
-            v-bind:url="create_button.url"
-            v-bind:alert="create_button.alert"
-            v-bind:modal="create_button.modal"
-            v-on:destroyResult="destroy"
-            v-on:createResult="create"
-            ></custom-button-vue>
         </div>
-
-    	<table class="table table-responsive-md table-striped">
+        <table class="table table-responsive-md table-striped">
             <thead class="thead">
                 <tr>
                     <th v-for="column in col" v-bind:style="column.style" v-bind:class="column.class">
@@ -102,25 +111,28 @@
 
 <script>
     export default {
-    	name:  'Pagination',
-    	props: {
-		    columns: Array,
-		    results: Array,
+        name:  'PaginationVue',
+        props: {
+            columns: Array,
+            results: Array,
             numberPerPage: Array,
             createButton: Object,
-		},
-    	data: function(){
+            filters: Array,
+        },
+        data: function(){
             return{
-            	pages: [],
-            	currentSortDir: 'asc',
-            	currentSort: 'nom',
-            	col: this.columns,
-            	res: this.results,
-            	page: 1,
-				perPage: 10,
+                pages: [],
+                currentSortDir: 'asc',
+                currentSort: 'nom',
+                col: this.columns,
+                res: this.results,
+                page: 1,
+                perPage: 10,
                 nbPerPage: this.numberPerPage,
                 create_button: this.createButton,
                 showModal: false,
+                fl: this.filters != undefined ? this.filters : false,
+                filter: {},
                 modal: {
                     name: '',
                     modalTitle: '',
@@ -131,12 +143,48 @@
                 }
             }
         },
+        mounted(){
+
+        },
         watch: {
             res: function() {
                 this.setPages();
-        	},
+            },
         },
         methods: {
+            search: function(event){
+                if(event != ''){
+                    let self = this;
+                    let all_result = [];
+
+                    self.columns.forEach(function(element){
+                        if(element.key != false){
+                            let result = [];
+                            result = self.results.filter(function(item){
+                                return item[element.key].toLowerCase().includes(event.toLowerCase());
+                            })
+                            all_result.push(result);
+                        }
+                    })
+
+                    var merged = [].concat.apply([], all_result);
+                    var obj = {};
+
+                    for ( var i=0, len=merged.length; i < len; i++ )
+                        obj[merged[i]['id']] = merged[i];
+
+                    merged = new Array();
+                    for ( var key in obj )
+                        merged.push(obj[key]);
+
+                    this.res = merged;
+                }else{
+                    this.res = this.results;
+                }
+                
+
+
+            },
             modalInfo: function(event){
                 this.modal = {
                     name: event.name,
@@ -157,16 +205,17 @@
 
                 this.$refs.modalComponent.showModal(this.modal, element);
             },
-        	sortOrder: function(tri, ordre){
-	            if(this.currentSort == tri && this.currentSortDir == 'asc') return 'fas fa-caret-up';
-	            if(this.currentSort == tri && this.currentSortDir == 'desc') return 'fas fa-caret-down';
-	        },
-	        setPages: function(event) {
+            sortOrder: function(tri, ordre){
+                if(this.currentSort == tri && this.currentSortDir == 'asc') return 'fas fa-caret-up';
+                if(this.currentSort == tri && this.currentSortDir == 'desc') return 'fas fa-caret-down';
+            },
+            setPages: function(event) {
                 this.pages = [];
                 let numberOfPages = Math.ceil(this.res.length / this.perPage);
                 for (let index = 1; index <= numberOfPages; index++) {
                     this.pages.push(index);
                 }
+                // this.page = 1;
             },
             paginationPage: function(){
                 let before = 1;
@@ -205,11 +254,66 @@
                 }).indexOf(event);
 
                 this.res.splice(element, 1);
+            },
+            changeFilters: function(event){
+                var self = this;
+
+                if(event.filter.type == 'select'){
+                    if(event.value != 0) self.filter[event.name] = event.value;    
+                    else delete self.filter[event.name];
+
+                    self.res = self.results.filter(function(item){
+                        for(var key in self.filter) {
+                            if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
+                        }
+                        return true;
+                    });
+
+                }else if(event.filter.type == 'checkbox'){
+                    self.filter[event.name] = event.value;
+
+                    console.log(self.filter)
+
+                    let result = [];
+                    let cle = 0;
+
+                    for(let checkbox in self.filter){
+                        let donnee = self.results.filter(function(item){
+                            for(var key in self.filter) {
+                                if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
+                            }
+                            return item.id;
+                        });
+                        console.log(checkbox)
+                        cle++
+                        result.push(donnee);
+                    }
+
+                    console.log(result[0]);
+
+
+                    // self.res = self.results.filter(function(item){
+                    //     for(var key in checkbox){
+                    //         if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
+                    //     }
+                    //     return true;
+                    // });
+
+                    self.res = Object.values(result[0]);
+                }
+
+                
+
+                this.page = 1;
+            },
+            resetFilter: function(event){
+                this.filter = [];
+                this.res = this.results;
             }
         },
         computed: {
             displayedDonnees: function() {
-            	return this.sort(this.res);
+                return this.sort(this.res);
             },
         }
     }

@@ -1,6 +1,7 @@
 import paginationComponent from './PaginationVue.vue';
 import buttonComponent from './CustomButtonVue.vue';
 import modalComponent from './ModalVue.vue';
+import filterComponent from './FiilterVue.vue';
 
 function install(Vue) {
   if (install.installed) return
@@ -8,6 +9,7 @@ function install(Vue) {
   Vue.component('PaginationVue', paginationComponent)
   Vue.component('CustomButtonVue', buttonComponent)
   Vue.component('ModalVue', modalComponent)
+  Vue.component('FilterVue', filterComponent)
 }
 
 const plugin = {
@@ -28,9 +30,11 @@ if (GlobalVue) {
 paginationComponent.install = install
 buttonComponent.install = install
 modalComponent.install = install
+filterComponent.install = install
 
 export default {
 	paginationComponent,
 	buttonComponent,
-	modalComponent
+	modalComponent,
+	filterComponent
 }
