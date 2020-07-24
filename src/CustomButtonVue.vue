@@ -76,8 +76,6 @@
             	form_validation: this.alert != false ? false : true, 
             	csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             }
-
-            console.log(this.mod);
         },
         methods: {
         	create(event){
@@ -125,8 +123,6 @@
         			this.$dialog
             		.confirm(message, options)
               		.then(function(dialog) {
-                		// console.log('Clicked on proceed &&');
-                		// document.getElementById('destroy_form_'+self.id).submit();
 		                let url = document.getElementById('destroy_form_'+self.id).getAttribute("action");
 		                
 		                axios.post(url, { 
