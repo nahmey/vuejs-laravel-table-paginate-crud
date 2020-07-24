@@ -9,16 +9,17 @@
             v-on:search="search"
             ></filter-vue>
         </template>
-        <div>
+        <template>
             <div class="clearfix mb-4">
-                <div class="float-right">
+                <div class="float-right ml-4">
                     <select class="form-control" v-on:change="setPages($event), page = 1" v-model="perPage">
                         <option v-for="nb in nbPerPage" :value="nb" :key="'nbPerPage' + nb">
                             {{nb}}
                         </option>
                     </select>
                 </div>
-                <custom-button-vue v-if="create_button"
+                <p class="text-primary float-right text-center mb-0 mr-4 align-middle">Votre recherche : {{countResult}} Résultat(s)</p>
+                <custom-button-vue class="float-left" v-if="create_button"
                 v-on:modalInfo="modalInfo"
                 v-bind:classButton="create_button.class_button" 
                 v-bind:text="create_button.text" 
@@ -33,7 +34,7 @@
                 v-on:createResult="create"
                 ></custom-button-vue>
             </div>
-        </div>
+        </template>
         <table class="table table-responsive-md table-striped">
             <thead class="thead">
                 <tr>
@@ -85,11 +86,23 @@
                 <li class="page-item" v-if="page != 1">
                     <a class="page-link"  v-on:click.prevent="page--" href="#">Retour</a>
                 </li>
-                <div v-for="pageNumber in paginationPage()">
+                <li v-if="page != 1 && page > 5">
+                    <a class="page-link page-scroll" v-on:click.prevent="page = 1" href="#">1</a>
+                </li>
+                <li v-if="page != 1 && page > 5" aria-disabled="true">
+                    <a class="page-link page-scroll" href="javascript:">...</a>
+                </li>
+                <template v-for="pageNumber in paginationPage()">
                     <li :class="page == pageNumber ? 'page-item active' : 'page-item'">
                         <a class="page-link page-scroll" v-on:click.prevent="page = pageNumber" href="#">{{pageNumber}}</a>
                     </li>
-                </div>
+                </template>
+                <li v-if="page != numberOfPages && page < numberOfPages-5" aria-disabled="true">
+                    <a class="page-link page-scroll" href="javascript:">...</a>
+                </li>
+                <li v-if="page != numberOfPages && page < numberOfPages-5 ">
+                    <a class="page-link page-scroll" v-on:click.prevent="page = numberOfPages" href="#">{{numberOfPages}}</a>
+                </li>
                 <li class="page-item" v-if="page < pages.length">
                     <a class="page-link" v-on:click.prevent="page++" href="#">Suivant</a>
                 </li>
@@ -133,6 +146,9 @@
                 showModal: false,
                 fl: this.filters != undefined ? this.filters : false,
                 filter: {},
+                countResult: 0,
+                numberOfPages: 0,
+                searchbar: '',
                 modal: {
                     name: '',
                     modalTitle: '',
@@ -148,43 +164,11 @@
         },
         watch: {
             res: function() {
+                this.countResult = this.res.length;
                 this.setPages();
             },
         },
         methods: {
-            search: function(event){
-                if(event != ''){
-                    let self = this;
-                    let all_result = [];
-
-                    self.columns.forEach(function(element){
-                        if(element.key != false){
-                            let result = [];
-                            result = self.results.filter(function(item){
-                                return item[element.key].toLowerCase().includes(event.toLowerCase());
-                            })
-                            all_result.push(result);
-                        }
-                    })
-
-                    var merged = [].concat.apply([], all_result);
-                    var obj = {};
-
-                    for ( var i=0, len=merged.length; i < len; i++ )
-                        obj[merged[i]['id']] = merged[i];
-
-                    merged = new Array();
-                    for ( var key in obj )
-                        merged.push(obj[key]);
-
-                    this.res = merged;
-                }else{
-                    this.res = this.results;
-                }
-                
-
-
-            },
             modalInfo: function(event){
                 this.modal = {
                     name: event.name,
@@ -215,6 +199,8 @@
                 for (let index = 1; index <= numberOfPages; index++) {
                     this.pages.push(index);
                 }
+
+                this.numberOfPages = numberOfPages;
                 // this.page = 1;
             },
             paginationPage: function(){
@@ -255,14 +241,59 @@
 
                 this.res.splice(element, 1);
             },
+            checkIfSearchBar: function(self){
+                let merged = [];
+                if(self.searchBar != ''){
+                    let all_result = [];
+                    self.columns.forEach(function(element){
+                        if(element.key != false){
+                            let result = [];
+                            result = self.results.filter(function(item){
+                                return item[element.key].toLowerCase().includes(self.searchBar);
+                            })
+                            all_result.push(result);
+                        }
+                    })
+
+                    merged = [].concat.apply([], all_result);
+                    let obj = {};
+
+                    for ( let i=0, len=merged.length; i < len; i++ ) obj[merged[i]['id']] = merged[i];
+
+                    merged = new Array();
+                    for ( let key in obj ) merged.push(obj[key]); 
+                }else{
+                    merged = self.results;
+                }
+                return merged;
+            },
+            search: function(event){
+                let self = this;
+                self.searchBar = event.toLowerCase();
+                let merged = this.checkIfSearchBar(self);
+
+                /*
+                 * If select filter is active 
+                 */
+                merged = merged.filter(function(item){
+                    for(var key in self.filter) {
+                        if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
+                    }
+                    return true;
+                });
+
+                this.res = merged;
+                this.page = 1;
+            },
             changeFilters: function(event){
                 var self = this;
+                let merged = this.checkIfSearchBar(self);
 
                 if(event.filter.type == 'select'){
                     if(event.value != 0) self.filter[event.name] = event.value;    
                     else delete self.filter[event.name];
 
-                    self.res = self.results.filter(function(item){
+                    self.res = merged.filter(function(item){
                         for(var key in self.filter) {
                             if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
                         }
@@ -289,7 +320,7 @@
                         result.push(donnee);
                     }
 
-                    console.log(result[0]);
+                    // console.log(result[0]);
 
 
                     // self.res = self.results.filter(function(item){
@@ -301,14 +332,12 @@
 
                     self.res = Object.values(result[0]);
                 }
-
-                
-
                 this.page = 1;
             },
             resetFilter: function(event){
                 this.filter = [];
                 this.res = this.results;
+                // this.$refs.modalComponent.showModal(this.modal, element);
             }
         },
         computed: {
