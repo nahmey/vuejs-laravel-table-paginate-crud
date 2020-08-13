@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="hr == false && act != 'destroy' && mod.modal == false">
+		<template v-if="hr == false && act != 'destroy' && mod.modal == false && act != 'vue-router'">
 			<button :class="cl != false ? cl : ''">
 				<template v-if="ic != false">
 					<i :class="ic"></i>
@@ -10,7 +10,7 @@
 				</template>
 			</button>
 		</template>
-		<template v-else-if="hr == true && act != 'destroy' && mod.modal == false">
+		<template v-else-if="hr == true && act != 'destroy' && mod.modal == false && act != 'vue-router'">
 			<a :class="cl != false ? cl : ''" :href="generateLink()">
 				<template v-if="ic != false">
 					<i :class="ic"></i>
@@ -20,7 +20,7 @@
 				</template>
 			</a>
 		</template>
-		<template v-else-if="hr != false && act == 'vue-router'">
+		<template v-else-if="ur != false && act == 'vue-router'">
 			<router-link :class="cl != false ? cl : ''" :to="generateLink()">
 				<template v-if="ic != false">
 					<i :class="ic"></i>
@@ -30,7 +30,7 @@
 				</template>
 			</router-link>
 		</template>
-		<template v-else-if="act == 'destroy' && mod.modal == false">
+		<template v-else-if="act == 'destroy' && mod.modal == false && act != 'vue-router'">
 			<form method="POST" v-bind:action="generateLink()" @submit.prevent="checkIfAlert()" v-bind:id="'destroy_form_' + id">
 	            <input type="hidden" name="_token" :value="csrf">
 	            <input type="hidden" name="_method" value="DELETE">
@@ -44,7 +44,7 @@
 	            </button>                  
 	        </form>
 		</template>
-		<template v-else-if="mod.modal == true">
+		<template v-else-if="mod.modal == true && act != 'vue-router'">
 			<button :class="cl != false ? cl : ''" @click="modalInfo()">
 				<template v-if="ic != false">
 					<i :class="ic"></i>
@@ -102,7 +102,7 @@
         			return this.url;
         		}else if(this.action == 'vue-router'){
         			let param = this.identifiant != undefined ? '/' + this.identifiant : '';
-        			return this.hr + param;
+        			return this.url + param;
         		}
         	},
         	modalInfo(){

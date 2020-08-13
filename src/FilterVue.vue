@@ -15,6 +15,7 @@
             <div class="card-body d-flex">
                 <div v-for="(filter, index) in fl" class="col-auto">
                     <template v-if="filter.type == 'select'">
+                        <label class="m-0">{{filter.name.toUpperCase()}}</label>
                         <select ref="selectFilters" class="form-control" v-on:change="changeFilters($event.target.value, filter)" v-model="model[filter.name]">
                             <option value="0" selected="selected">TOUS</option>
                             <option v-for="subFilter in filter.data" :value="subFilter">{{subFilter.toUpperCase()}}</option>
