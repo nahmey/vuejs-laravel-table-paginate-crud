@@ -20,6 +20,16 @@
 				</template>
 			</a>
 		</template>
+		<template v-else-if="hr != false && act == 'vue-router'">
+			<router-link :class="cl != false ? cl : ''" :to="generateLink()">
+				<template v-if="ic != false">
+					<i :class="ic"></i>
+				</template>
+				<template v-if="text != false">
+					{{txt}}
+				</template>
+			</router-link>
+		</template>
 		<template v-else-if="act == 'destroy' && mod.modal == false">
 			<form method="POST" v-bind:action="generateLink()" @submit.prevent="checkIfAlert()" v-bind:id="'destroy_form_' + id">
 	            <input type="hidden" name="_token" :value="csrf">
@@ -90,6 +100,9 @@
         			}
         		}else if(this.action == 'url'){
         			return this.url;
+        		}else if(this.action == 'vue-router'){
+        			let param = this.identifiant != undefined ? '/' + this.identifiant : '';
+        			return this.hr + param;
         		}
         	},
         	modalInfo(){
