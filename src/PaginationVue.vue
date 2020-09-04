@@ -129,14 +129,14 @@
             columns: Array,
             results: Array,
             numberPerPage: Array,
-            createButton: Object,
+            createButton: false,
             filters: Array,
         },
         data: function(){
             return{
                 pages: [],
                 currentSortDir: 'asc',
-                currentSort: 'nom',
+                currentSort: this.columns != false && this.columns[0] && this.columns[0].key ? this.columns[0].key : '',
                 col: this.columns,
                 res: this.results,
                 page: 1,

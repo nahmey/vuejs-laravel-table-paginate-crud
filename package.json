@@ -1,6 +1,6 @@
 {
   "name": "vuejs-laravel-table-pagination-crud",
-  "version": "1.0.17",
+  "version": "1.0.21",
   "description": "Laravel Crud module in vuejs with pagination, sorting, modal",
   "author": "Julien Kennel",
   "license": "MIT",

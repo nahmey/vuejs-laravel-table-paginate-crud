@@ -94,6 +94,8 @@
         	generateLink: function(){
         		if(this.action == 'edit' && this.mod.modal == false){
         			return this.url + '/' + this.identifiant + '/edit';
+        		}else if(this.action == 'show' && this.mod.modal == false){
+        			return this.url + '/' + this.identifiant + '/show';
         		}else if(this.action == 'destroy'){
         			if(this.url != false && this.identifiant != false){
         				return this.url + '/' + this.identifiant;
