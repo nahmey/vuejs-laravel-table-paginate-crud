@@ -97,7 +97,7 @@ Vue.component('filter-vue', FilterVue);
         },
         mounted: function() {
             const self = this;
-            axios.get('your url'')
+            axios.get('your url')
             .then(function (resp) {
 
                 // Get result of request
