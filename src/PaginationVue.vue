@@ -249,7 +249,7 @@
                         if(element.key != false){
                             let result = [];
                             result = self.results.filter(function(item){
-                                return item[element.key].toLowerCase().includes(self.searchBar);
+                                if(item[element.key] != undefined) return item[element.key].toLowerCase().includes(self.searchBar);
                             })
                             all_result.push(result);
                         }
