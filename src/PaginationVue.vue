@@ -295,7 +295,7 @@
 
                     self.res = merged.filter(function(item){
                         for(var key in self.filter) {
-                            if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()] != self.filter[key.toLowerCase()]) return false;
+                            if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()].trim() != self.filter[key.toLowerCase()].trim()) return false;
                         }
                         return true;
                     });
