@@ -58,7 +58,7 @@
                 <tr v-for="(data, index) in displayedDonnees" :key="data.id">
                     <td v-for="column in col" v-bind:class="column.class">
                         <div v-if="data[column.key]">
-                            {{data[column.key]}}
+                            <span v-html="data[column.key]"></span>
                         </div>
                         <div v-else-if="column.button && column.button == true">
                             <custom-button-vue
