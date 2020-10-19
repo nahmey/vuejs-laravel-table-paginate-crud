@@ -295,6 +295,11 @@
 
                     self.res = merged.filter(function(item){
                         for(var key in self.filter) {
+                            // OLD VERSION
+                            // if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()].trim() != self.filter[key.toLowerCase()].trim()) return false;
+                            //
+                            if(item[key.toLowerCase()] != undefined && item[key.toLowerCase()].trim() == self.filter[key.toLowerCase()].trim()) return true;
+                            if(item[key.toLowerCase()] != undefined && item[key.toLowerCase()].trim().includes(self.filter[key.toLowerCase()].trim())) return true;
                             if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()].trim() != self.filter[key.toLowerCase()].trim()) return false;
                         }
                         return true;
