@@ -298,7 +298,7 @@
                             // OLD VERSION
                             // if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()].trim() != self.filter[key.toLowerCase()].trim()) return false;
                             //
-                            if(item[key.toLowerCase()] === undefined || item[key.toLowerCase()].trim() != self.filter[key.toLowerCase()].trim() || !item[key.toLowerCase()].trim().includes(self.filter[key.toLowerCase()].trim()) ) return false;
+                            if(item[key.toLowerCase()] === undefined || !item[key.toLowerCase()].trim().includes(self.filter[key.toLowerCase()].trim()) ) return false;
                         }
                         return true;
                     });
