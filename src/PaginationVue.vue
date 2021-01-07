@@ -131,12 +131,16 @@
             numberPerPage: Array,
             createButton: false,
             filters: Array,
+            sortDefault : {
+                'key': false,
+                'order' :false
+            },
         },
         data: function(){
             return{
                 pages: [],
-                currentSortDir: 'asc',
-                currentSort: this.columns != false && this.columns[0] && this.columns[0].key ? this.columns[0].key : '',
+                currentSortDir: this.sortDefault != undefined ? this.sortDefault.order : 'asc',
+                currentSort: this.columns != false && this.columns[0] && this.columns[0].key && this.sortDefault === undefined ? this.columns[0].key : this.sortDefault.key,
                 col: this.columns,
                 res: this.results,
                 page: 1,
@@ -248,8 +252,14 @@
                     self.columns.forEach(function(element){
                         if(element.key != false){
                             let result = [];
+                            let el = '';
                             result = self.results.filter(function(item){
-                                if(item[element.key] != undefined) return item[element.key].toLowerCase().includes(self.searchBar);
+                                if(typeof item[element.key] != 'string'){
+                                    el = item[element.key].toString();
+                                }else{
+                                    el = item[element.key];
+                                }
+                                if(el != undefined) return el.toLowerCase().includes(self.searchBar); 
                             })
                             all_result.push(result);
                         }

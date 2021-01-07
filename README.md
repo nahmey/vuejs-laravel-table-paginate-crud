@@ -72,6 +72,13 @@ Vue.component('filter-vue', FilterVue);
     v-bind:numberPerPage="number_per_page" 
     v-bind:createButton="create_button"
     v-bind:filters="filters"
+    
+    // Optionnal
+    v-bind:sortDefault="{
+        'key':'name', 
+        'order':'asc'
+    }"
+
     ></pagination-vue>
     
     <div v-else class="text-center">
@@ -339,6 +346,15 @@ self.columns = [
     },
 ];
 
+```
+
+You can declare default column with prop :
+
+```html
+v-bind:sortDefault="{
+    'key':'your_key', 
+    'order':'asc or desc'
+}"
 ```
 
 
