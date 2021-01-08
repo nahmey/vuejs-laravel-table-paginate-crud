@@ -254,7 +254,7 @@
                             let result = [];
                             let el = '';
                             result = self.results.filter(function(item){
-                                if(typeof item[element.key] != 'string'){
+                                if(item[element.key] != undefined && typeof item[element.key] != 'string'){
                                     el = item[element.key].toString();
                                 }else{
                                     el = item[element.key];
