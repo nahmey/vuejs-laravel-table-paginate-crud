@@ -21,9 +21,9 @@
                 <p class="text-primary float-right text-center mb-0 mr-4 align-middle">Votre recherche : {{countResult}} Résultat(s)</p>
                 <custom-button-vue class="float-left" v-if="create_button"
                 v-on:modalInfo="modalInfo"
-                v-bind:classButton="create_button.class_button" 
-                v-bind:text="create_button.text" 
-                v-bind:action="create_button.action" 
+                v-bind:classButton="create_button.class_button"
+                v-bind:text="create_button.text"
+                v-bind:action="create_button.action"
                 v-bind:icon="create_button.icon"
                 v-bind:identifiant="create_button.id"
                 v-bind:href="create_button.href"
@@ -58,14 +58,16 @@
                 <tr v-for="(data, index) in displayedDonnees" :key="data.id">
                     <td v-for="column in col" v-bind:class="column.class">
                         <div v-if="data[column.key]">
-                            <span v-html="data[column.key]"></span>
+                            <span v-if="column.date" v-html="toDate(data[column.key])"></span>
+                            <span v-else-if="column.datetime" v-html="toDatetime(data[column.key])"></span>
+                            <span v-else v-html="data[column.key]"></span>
                         </div>
                         <div v-else-if="column.button && column.button == true">
                             <custom-button-vue
-                            v-on:modalInfo="modalInfo" 
-                            v-bind:classButton="column.class_button" 
-                            v-bind:text="column.text" 
-                            v-bind:action="column.action" 
+                            v-on:modalInfo="modalInfo"
+                            v-bind:classButton="column.class_button"
+                            v-bind:text="column.text"
+                            v-bind:action="column.action"
                             v-bind:icon="column.icon"
                             v-bind:identifiant="data.id"
                             v-bind:href="column.href"
@@ -209,7 +211,7 @@
             },
             paginationPage: function(){
                 let before = 1;
-                if(this.page <= 5) before = this.page - this.page; 
+                if(this.page <= 5) before = this.page - this.page;
                 else before = this.page-5;
                 return this.pages.slice(before, this.page+4);
             },
@@ -217,10 +219,15 @@
                 let currentSort = this.currentSort;
                 let currentSortDir = this.currentSortDir;
                 let self = this;
-                data.sort(function(a, b) { 
+                data.sort(function(a, b) {
                     let modifier = 1;
                     if(self.currentSortDir === 'desc') modifier = -1;
-                    return a[currentSort] > b[currentSort] ? 1*modifier : -1*modifier;
+
+                    if (moment.isDate(a[currentSort]) && moment.isDate(b[currentSort])) {
+                        return moment(a[currentSort]).isAfter(b[currentSort]);
+                    } else {
+                        return a[currentSort] > b[currentSort] ? 1*modifier : -1*modifier;
+                    }
                 });
 
                 let from = (this.page * this.perPage) - this.perPage;
@@ -229,7 +236,7 @@
             },
             create(event){
                 this.res.push(event);
-                
+
             },
             edit(event){
                 let element = this.res.map(function(x){
@@ -259,7 +266,7 @@
                                 }else{
                                     el = item[element.key];
                                 }
-                                if(el != undefined) return el.toLowerCase().includes(self.searchBar); 
+                                if(el != undefined) return el.toLowerCase().includes(self.searchBar);
                             })
                             all_result.push(result);
                         }
@@ -271,7 +278,7 @@
                     for ( let i=0, len=merged.length; i < len; i++ ) obj[merged[i]['id']] = merged[i];
 
                     merged = new Array();
-                    for ( let key in obj ) merged.push(obj[key]); 
+                    for ( let key in obj ) merged.push(obj[key]);
                 }else{
                     merged = self.results;
                 }
@@ -283,7 +290,7 @@
                 let merged = this.checkIfSearchBar(self);
 
                 /*
-                 * If select filter is active 
+                 * If select filter is active
                  */
                 let results = merged.filter(function(item){
                     for(var key in self.filter) {
@@ -300,7 +307,7 @@
                 let merged = this.checkIfSearchBar(self);
 
                 if(event.filter.type == 'select'){
-                    if(event.value != 0) self.filter[event.name] = event.value;    
+                    if(event.value != 0) self.filter[event.name] = event.value;
                     else delete self.filter[event.name];
 
                     self.res = merged.filter(function(item){
@@ -351,6 +358,12 @@
                 this.filter = [];
                 this.res = this.results;
                 // this.$refs.modalComponent.showModal(this.modal, element);
+            },
+            toDate: function(date) {
+                return moment(date).format('DD/MM/YYYY');
+            },
+            toDatetime: function(datetime) {
+                return moment(date).format('DD/MM/YYYY HH:mm');
             }
         },
         computed: {

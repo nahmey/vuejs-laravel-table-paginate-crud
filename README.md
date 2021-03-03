@@ -1,3 +1,8 @@
+Forked by tplasse (https://github.com/tplasse/vuejs-laravel-table-paginate-crud)
+From nahmey (https://github.com/nahmey/vuejs-laravel-table-paginate-crud)
+Fix sort by date. (didn't worked before)
+
+
 # vuejs-laravel-table-paginate-crud
 
 ![alt text](https://julien-kennel.fr/images/git/table.PNG)
@@ -20,6 +25,7 @@ This package also allows pagination and sorting with an easy configuration.
 * Laravel >=5.8. Required.
 * Vue.js. Required.
 * Bootstrap (CSS). Required.
+* Moment JS Required. (only if you want to sort by date or datetime)
 * Vue-js-modal. Required. (https://www.npmjs.com/package/vue-js-modal)
 * Vue-js Dialog. Required. (https://www.npmjs.com/package/vuejs-dialog)
 * Fontawesome. Optional. (https://fontawesome.com/)
@@ -67,20 +73,20 @@ Vue.component('filter-vue', FilterVue);
 ```html
 <template>
     <pagination-vue v-if="load_data"  
-    v-bind:columns="columns" 
-    v-bind:results="results" 
-    v-bind:numberPerPage="number_per_page" 
+    v-bind:columns="columns"
+    v-bind:results="results"
+    v-bind:numberPerPage="number_per_page"
     v-bind:createButton="create_button"
     v-bind:filters="filters"
-    
+
     // Optionnal
     v-bind:sortDefault="{
-        'key':'name', 
+        'key':'name',
         'order':'asc'
     }"
 
     ></pagination-vue>
-    
+
     <div v-else class="text-center">
         <i class="fas fa-circle-notch fa-spin"></i> Loading...
     </div>
@@ -169,7 +175,7 @@ Vue.component('filter-vue', FilterVue);
                             required: true,
                         }]
                     },
-                    
+
                 }
 
                 self.columns = [
@@ -252,25 +258,25 @@ Vue.component('filter-vue', FilterVue);
 
 ## Configuration
 
-### Note 
+### Note
 
 In the head of app :
 ```html
-<meta name="csrf-token" content="{{ csrf_token() }}"> 
+<meta name="csrf-token" content="{{ csrf_token() }}">
 ```
 
 (optional)
 ```html
 <script type="text/javascript">
     var base_url = "{!! url('/') !!}";
-</script> 
+</script>
 ```
 
-### Results 
+### Results
 <!-- `Array` -->
 self.results = resp.data['your_data'];
 
-### Number Per Page 
+### Number Per Page
 Number of element displaying
 
 self.number_per_page = [10,20,50];
@@ -282,9 +288,11 @@ self.number_per_page = [10,20,50];
 self.columns = [
     {
         title: 'Name', // Name of column
-        key: 'name', // name of column in yout database
+        key: 'name', // name of column in your database
         style: false, // add custom css
         class: false, // add boostrap class
+		date: false, // set true if your data are date
+		datetime: false, // set true if your data are datetime
     },
     {
         title: 'Age',
@@ -298,7 +306,7 @@ self.columns = [
         key: false, // (true, false) - false if the column don't exist in your Database
         button: true, // Default : false - (true or false) for displaying button
         href: true, // Default : false - (true or false) True if <a href="">
-        text: false,  // Default : false - (string) Text of button 
+        text: false,  // Default : false - (string) Text of button
         class_button: 'btn btn-primary', // Default : false - (string) bootstrap class button
         action: 'edit', // (create, edit, destroy) - Laravel CRUD action
         url: base_url + '/users', // Default : false - url which will be generated
@@ -324,7 +332,7 @@ self.columns = [
                 required: true,
             }]
         },
-        
+
     },
     {
         title: 'Delete',
@@ -352,7 +360,7 @@ You can declare default column with prop :
 
 ```html
 v-bind:sortDefault="{
-    'key':'your_key', 
+    'key':'your_key',
     'order':'asc or desc'
 }"
 ```
@@ -369,7 +377,7 @@ If you want a create button, just declare self.create_button in mounted() functi
 self.create_button = {
     button: true, // Default : false - (true or false) for displaying button
     href: false, // Default : false - (true or false) True if <a href="">
-    text: 'Add Users',  // Default : false - (string) Text of button 
+    text: 'Add Users',  // Default : false - (string) Text of button
     class_button: 'btn btn-primary text-white', // Default : false - (string) bootstrap class button
     action: 'modal', // Default : false - (create, edit, destroy, url, modal)
 
