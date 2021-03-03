@@ -25,7 +25,7 @@ This package also allows pagination and sorting with an easy configuration.
 * Laravel >=5.8. Required.
 * Vue.js. Required.
 * Bootstrap (CSS). Required.
-* Moment JS Required.
+* Moment JS Required. (only if you want to sort by date or datetime)
 * Vue-js-modal. Required. (https://www.npmjs.com/package/vue-js-modal)
 * Vue-js Dialog. Required. (https://www.npmjs.com/package/vuejs-dialog)
 * Fontawesome. Optional. (https://fontawesome.com/)
